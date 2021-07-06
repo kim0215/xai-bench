@@ -18,22 +18,22 @@ class Faithfulness:
         self.version = version
         assert version in ['inc', 'dec']
 
-    def evaluate(self, X, y, feature_weights, ground_truth_weights, X_train, y_train=None, n_sample=100, X_train_feature_weights=None):
+    def evaluate(self, X, y, feature_weights, ground_truth_weights, y_predict, X_train = None, y_train=None, n_sample=100, X_train_feature_weights=None):
         X = X.values
         num_datapoints, num_features = X.shape
         absolute_weights = abs(feature_weights)
 
         faithfulnesses = []
-        yp = self.trained_model.predict(X_train)
+
         for i in range(num_datapoints):
             """
             for each datapoint i, compute the correlation between feature weights
             and the delta in prediction when ablating each feature with replacement
             """
             # original prediction
-            y_pred = np.squeeze(self.trained_model.predict(yp[i]))
+            y_pred = np.squeeze(y_predict[i])
             if self.version == 'inc':
-                y_pred = np.mean(np.squeeze(self.trained_model.predict(X)))
+                y_pred = np.mean(np.squeeze(y_pridict))
             # D new predictions (ablate one feature at a time)
             y_preds_new = np.zeros_like(X[i])
             for j in range(num_features):
